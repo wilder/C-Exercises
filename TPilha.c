@@ -10,7 +10,7 @@ void TPilha(int array[15]){
 	int i;
 	for(i = 0; i<15; i++){
 		if(i%2==0){
-			push(&stack, i);
+			push(&stack, array[i]);
 		}else{
 			if(!isEmpty(&stack)){
 				pop(&stack);
