@@ -137,7 +137,6 @@ lerArquivo(Pizza *pizzas){
 
 }
 
-
 int main(int argc, char const *argv[])
 {
 		int op = 1;		
