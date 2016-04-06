@@ -10,25 +10,26 @@ typedef struct
 }Pizza;
   
 
+
 void inserir(Pizza pizzas[], int quantidade)
 {
 	int i;
 	for(i = 0; i < quantidade; ++i)
 	{
+		fflush(stdin);
 		printf("Sabor da pizza: \n");
 		fgets(pizzas[i].nome, sizeof pizzas[i].nome , stdin);
+		fflush(stdin);
 		printf("Valor da pizza: \n");
 		scanf("%f",&pizzas[i].preco);
-		getchar();
+		fflush(stdin);
 		pizzas[i].ativo = true;
 		pizzas[i].codigo = i;
 	}
 }
 
-Pizza* procurar(Pizza pizzas[], int codigo)
+Pizza* procurar(Pizza pizzas[], int codigo, int tamanho)
 {
-	int tamanho = 2;
-	printf("%i",tamanho);
 	Pizza *pizzaProcurada;
 	for (int i = 0; i < tamanho; ++i)
 	{
@@ -38,38 +39,109 @@ Pizza* procurar(Pizza pizzas[], int codigo)
 			return pizzaProcurada;
 		}
 	}
-	printf("Pizza não encontrada");
+	printf("\nPizza não encontrada\n");
 	return pizzaProcurada;
 }
 
-void excluir(Pizza pizzas[], int codigo)
+void excluir(Pizza pizzas[], int codigo, int tamanho)
 {
-	Pizza *pizza_a_deletar = procurar(pizzas, codigo);
+	Pizza *pizza_a_deletar = procurar(pizzas, codigo, tamanho);
 	if(pizza_a_deletar){
 		pizza_a_deletar->ativo = false;
+		printf(" excluído!\n");
 	}
 }
 
-void alterar(Pizza pizzas[], int codigo){
-	Pizza *pizza_a_alterar = procurar(pizzas, codigo);
+void alterar(Pizza pizzas[], int codigo, int tamanho){
+	Pizza *pizza_a_alterar = procurar(pizzas, codigo, tamanho);
 	if(pizza_a_alterar != NULL && pizza_a_alterar->ativo){
-		printf("Sabor da pizza: \n");
+		printf("\nSabor da pizza: \n");
+		fflush(stdin);
 		fgets(pizza_a_alterar->nome, sizeof pizza_a_alterar->nome , stdin);
 		printf("Valor da pizza: \n");
+		fflush(stdin);
 		scanf("%f",&pizza_a_alterar->preco);
-		getchar();
+		fflush(stdin);
+		printf("\nAlterado!\n");
 	}
+}
+
+escreverArquivo(Pizza *pizzas, int tamanho){
+	FILE *arq;
+	int i;
+	arq = fopen("/documents/programming/DataStructures/Structs/pizzas.bin" , "wa");
+	
+	if(!arq){
+		printf("Erro ao abrir arquivo!");
+		exit(0);
+	}
+
+	for(i = 0; i < tamanho ; ++i){
+		fprintf(arq , "Codigo: %d" ,pizzas[i].codigo);
+		fprintf(arq , "\nNome: %s" ,pizzas[i].nome);
+		fprintf(arq , "\nPreco: %f" ,pizzas[i].preco);
+	}
+
+}
+
+lerArquivo(Pizza *pizzas){
+	FILE *arq;
+	arq = fopen("/documents/programming/DataStructures/Structs/pizzas.bin" , "r");
+
+	int i=0; 
+	
+	while(fread(&pizzas[i],sizeof(pizzas[i]),i,arq)){
+		printf("\nSabor: %s",pizzas[i].nome);
+		printf("\nPreco: $%f",pizzas[i].preco);
+		printf("\nCodigo: %i",pizzas[i].codigo);
+	}
+
+	fclose(arq);
+
 }
 
 
 int main(int argc, char const *argv[])
 {
-	Pizza pizzas[2];
-	inserir(pizzas,2);
-	char nome[] = "wilder";
-	alterar(pizzas, 0);
-	printf("%s", pizzas[0].nome);
-	
-	system("PAUSE");
-	return 0;
+		int op = 1;		
+						
+		while(op>0 && op <=6)
+		{
+			//Valores fixos para teste
+			Pizza pizzas[2];
+			int tamanho = 2;
+			int codigo = 0;
+			printf("1) Inserir\t2) Procurar\t3) Excluir\n\n4) Alterar\t5) Gravar em arquivo\t6) Ler de arquivo\n\n\t\t0) Sair\n\n\nOpcao: ");
+			scanf("%i",&op);
+			switch (op)
+			{
+				case 1:				
+					inserir(pizzas,tamanho);
+					break;
+				case 2:
+					printf("\nCódigo da pizza que deseja procurar: ");
+					scanf("%d",&codigo);				
+					procurar(pizzas,codigo,tamanho);
+					break;
+				case 3:
+					printf("\nCódigo da pizza que deseja excluir: ");
+					scanf("%d",&codigo);	
+					excluir(pizzas,codigo,tamanho);
+					break;
+				case 4:
+					printf("\nCódigo da pizza que deseja alterar: ");
+					scanf("%d",&codigo);	
+					alterar(pizzas,codigo,tamanho);
+					break;
+				case 5:
+					escreverArquivo(pizzas,tamanho);
+					break;
+				case 6:
+					lerArquivo(pizzas);
+					break;
+				default:
+					printf("Saindo...\n");
+			}
+		}
+		return 0;
 }
