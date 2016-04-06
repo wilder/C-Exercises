@@ -10,7 +10,12 @@ typedef struct
 }Pizza;
   
 
-
+/*
+Objetivo: Cadastra pizza com os valores digitados pelo usuário no vetor de struct.
+Parâmetros:
+pizzas[] -> Parâmetro do tipo "Pizza". É onde os dados digitados pelo usuário serão armazenados. Passagem por referência (pois essa variável será alterada na função). 
+quantidade -> Parâmetro inteiro. Possui o valor do tamanho do vetor, ou quantidade de "Pizzas" que serão cadastradas. Passagem por valor (pois essa variável não será alterada na função).
+*/
 void inserir(Pizza pizzas[], int quantidade)
 {
 	int i;
@@ -28,6 +33,13 @@ void inserir(Pizza pizzas[], int quantidade)
 	}
 }
 
+/*
+Objetivo: Procura pizza cadastrada por código e retorna um ponteiro da pizza encontrada.
+Parâmetros:
+pizzas[] -> Parâmetro do tipo "Pizza". É onde a "Pizza" será procurada. Passagem por referência (pois é um vetor). 
+codigo ->  Parâmetro do tipo inteito. Código da "Pizza" a ser encontrada. Passagem por valor (pois essa variável não será alterada na função).
+tamanho ->  Parâmetro do tipo inteito. Tamanho do vetor de "Pizzas". Passagem por valor (pois essa variável não será alterada na função).
+*/
 Pizza* procurar(Pizza pizzas[], int codigo, int tamanho)
 {
 	Pizza *pizzaProcurada;
@@ -43,6 +55,13 @@ Pizza* procurar(Pizza pizzas[], int codigo, int tamanho)
 	return pizzaProcurada;
 }
 
+/*
+Objetivo: Procura pizza por código e faz um delete lógico caso encontrado.
+Parâmetros:
+pizzas[] -> Parâmetro do tipo "Pizza". É onde a "Pizza" será procurada. Passagem por referência (pois a "Pizza" encontrada será alterada na função). 
+codigo ->  Parâmetro do tipo inteito. Código da "Pizza" a ser encontrada. Passagem por valor (pois essa variável não será alterada na função).
+tamanho ->  Parâmetro do tipo inteito. Tamanho do vetor de "Pizzas". Passagem por valor (pois essa variável não será alterada na função).
+*/
 void excluir(Pizza pizzas[], int codigo, int tamanho)
 {
 	Pizza *pizza_a_deletar = procurar(pizzas, codigo, tamanho);
@@ -52,6 +71,13 @@ void excluir(Pizza pizzas[], int codigo, int tamanho)
 	}
 }
 
+/*
+Objetivo: Procura pizza por código e faz um edita com novos valores digitados pelo usuário caso encontrado.
+Parâmetros:
+pizzas[] -> Parâmetro do tipo "Pizza". É onde a "Pizza" será procurada. Passagem por referência (pois a "Pizza" encontrada será alterada na função). 
+codigo ->  Parâmetro do tipo inteito. Código da "Pizza" a ser encontrada. Passagem por valor (pois essa variável não será alterada na função).
+tamanho ->  Parâmetro do tipo inteito. Tamanho do vetor de "Pizzas". Passagem por valor (pois essa variável não será alterada na função).
+*/
 void alterar(Pizza pizzas[], int codigo, int tamanho){
 	Pizza *pizza_a_alterar = procurar(pizzas, codigo, tamanho);
 	if(pizza_a_alterar != NULL && pizza_a_alterar->ativo){
@@ -66,6 +92,12 @@ void alterar(Pizza pizzas[], int codigo, int tamanho){
 	}
 }
 
+/*
+Objetivo: Escrever em um arquivo os dados cadastados no vetor de "Pizzas"
+Parâmetros:
+pizzas[] -> Parâmetro do tipo "Pizza". É de onde os dados a serem salvos no arquivo serão "retirados". Passagem por referência (pois é um vetor). 
+tamanho ->  Parâmetro do tipo inteito. Tamanho do vetor de "Pizzas". Passagem por valor (pois essa variável não será alterada na função).
+*/
 escreverArquivo(Pizza *pizzas, int tamanho){
 	FILE *arq;
 	int i;
@@ -84,6 +116,11 @@ escreverArquivo(Pizza *pizzas, int tamanho){
 
 }
 
+/*
+Objetivo: Ler de um arquivo os dados escritos posteriormente, exibir e colocar em um vetor de "Pizzas"
+Parâmetros:
+pizzas[] -> Parâmetro do tipo "Pizza". É onde a os dados do arquivo serão guardados. Passagem por referência (pois será alterado na função). 
+*/
 lerArquivo(Pizza *pizzas){
 	FILE *arq;
 	arq = fopen("/documents/programming/DataStructures/Structs/pizzas.bin" , "r");
